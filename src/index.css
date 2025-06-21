@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-gradient-dark text-white font-inter;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-primary bg-clip-text text-transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease-in-out infinite;
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+  
+  .tech-grid {
+    background-image: 
+      linear-gradient(rgba(104, 226, 231, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(104, 226, 231, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-2xl hover:shadow-secondary/20;
+  }
+  
+  .section-divider {
+    @apply relative;
+  }
+  
+  .section-divider::before {
+    content: '';
+    @apply absolute top-0 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-gradient-primary rounded-full;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-navy-dark;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gradient-primary rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-secondary;
+}
+
+/* Selection styles */
+::selection {
+  @apply bg-secondary/30 text-white;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  @apply outline-2 outline-secondary outline-offset-2;
+}
+
+@layer utilities {
+  .animate-in {
+    opacity: 1 !important;
+    transform: none !important;
+    scale: 1 !important;
+  }
+}

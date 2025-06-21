@@ -1,4 +1,3 @@
-
 // import { HeroSection } from '@/components/HeroSection';
 // import  ProgramsSection  from '@/components/ProgramsSection';
 // import { StatsSection } from '@/components/StatsSection';
@@ -25,6 +24,7 @@ import ProgramsSection from '@/components/ProgramsSection';
 import { StatsSection } from '@/components/StatsSection';
 import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
+import StackingCardsAnimation from '@/components/StackingCardsAnimation';
 import { BookOpen, Users, Rocket, Award, Star , School  } from 'lucide-react';
 
 const Index = () => {
@@ -110,7 +110,8 @@ const Index = () => {
     <div className="min-h-screen bg-gray-900 text-white">
       <HeroSection />
       <ProgramsSection />
-      <StatsSection stats={statsData}/>
+      <StatsSection stats={statsData} />
+      <StackingCardsAnimation />
       <WhyChooseUsSection whyChooseUs={whyChooseUs} />
       <TestimonialsSection testimonials={testimonials}/>
     </div>

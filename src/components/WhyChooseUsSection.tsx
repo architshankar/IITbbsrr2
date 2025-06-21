@@ -2,6 +2,11 @@
 import React from 'react';
 import { LucideIcon, Users, Award, CheckCircle, Clock } from 'lucide-react';
 
+
+
+import { Zap, Target, Rocket, Globe, Shield, Star } from 'lucide-react';
+import ScrollAnimatedCards from './ScrollAnimatedCards';
+
 export interface WhyChooseUsItem {
   icon: LucideIcon;
   title: string;
@@ -36,6 +41,9 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ whyChooseUs }) 
             </div>
           ))}
         </div>
+      </div>
+      <div className="bg-primary-gradient text-white">
+        <ScrollAnimatedCards />
       </div>
     </section>
   );

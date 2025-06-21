@@ -1,0 +1,124 @@
+import React, { useLayoutEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const cardData = [
+  {
+    title: 'Expert Mentorship',
+    description: 'Learn from seasoned professionals who guide you through every step of your journey.',
+    color: '#3b82f6', // blue-500
+  },
+  {
+    title: 'Real-World Projects',
+    description: 'Gain hands-on experience with real industry projects and build a portfolio that stands out.',
+    color: '#2563eb', // blue-600
+  },
+  {
+    title: 'Certified Programs',
+    description: 'Complete the programs and get certified in your field to showcase your skills.',
+    color: '#1d4ed8', // blue-700
+  },{
+    title: 'Flexible Learning',
+    description: 'Do at your own pace with online programs designed to fit your schedule.',
+    color: '#1d4ed8', // blue-700
+  },
+];
+
+const StackingCardsAnimation = () => {
+  const containerRef = useRef(null);
+  const cardsRef = useRef([]);
+
+  useGSAP(() => {
+    const cards = cardsRef.current;
+    const container = containerRef.current;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: container,
+        pin: true,
+        scrub: 1,
+        start: 'top top',
+        end: '+=3000',
+      },
+    });
+
+    // Initial state: stacked deck
+    tl.set(cards, {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        xPercent: -50,
+        yPercent: -50,
+        width: '350px',
+        height: '450px',
+        transformOrigin: 'center center',
+        rotation: (i) => i * 5 - 5,
+        y: (i) => i * -20,
+        scale: (i) => 1 - (cards.length - 1 - i) * 0.1,
+        opacity: (i) => i === cards.length - 1 ? 1 : 0.5
+    });
+
+    cards.slice().reverse().forEach((card, index) => {
+        const i = cards.length - 1 - index;
+        // Animate each card
+        tl.to(card, {
+            scale: 1.1,
+            rotation: 0,
+            y: '-=40',
+            duration: 0.5,
+            opacity: 1,
+        }, `card${i}`)
+        .to(card, {
+            x: i % 2 === 0 ? '150%' : '-150%',
+            rotation: i % 2 === 0 ? 15 : -15,
+            duration: 0.5,
+        }, `card${i}+=1`)
+        if (i > 0) {
+            tl.to(cards[i-1], {
+                y: '-=20',
+                scale: 1,
+                opacity: 1,
+                duration: 0.5,
+            }, `card${i}`);
+        }
+    });
+
+
+  }, { scope: containerRef });
+
+  return (
+    <div style={{ minHeight: '400vh', position: 'relative' }} className="bg-gray-900">
+        <div className="text-center py-16">
+            <h2 className="text-4xl font-bold text-white">Why Choose INLIGHN TECH</h2>
+            <p className="text-lg text-gray-400">We're committed to bridging the gap between academic learning and industry requirements</p>
+        </div>
+      <div ref={containerRef} style={{ height: '100vh', position: 'relative', overflow: 'hidden' }}>
+        {cardData.map((card, index) => (
+          <div
+            key={index}
+            ref={el => cardsRef.current[index] = el}
+            style={{
+              backgroundColor: card.color,
+              borderRadius: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: 'white',
+              padding: '20px',
+              boxShadow: '0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)',
+            }}
+          >
+            <h2 className="text-2xl font-bold">{card.title}</h2>
+            <p className="text-lg mt-2">{card.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default StackingCardsAnimation;

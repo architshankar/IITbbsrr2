@@ -1,7 +1,9 @@
 
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { StatsSection } from '@/components/StatsSection';
+// import  {StatsSection}  from '@/components/StatsSection';
+import {  StatsSection } from '@/components/StatsSection';
+
 
 const About = () => {
   const values = [

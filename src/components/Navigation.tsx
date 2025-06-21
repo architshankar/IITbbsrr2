@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -70,7 +69,7 @@ export const Navigation = () => {
               </Link>
             ))}
             <Button className="bg-gradient-primary hover:bg-primary-dark text-white px-6 py-2 hover-glow">
-              Get Started
+              Login
             </Button>
           </div>
 
@@ -107,7 +106,7 @@ export const Navigation = () => {
                 </Link>
               ))}
               <Button className="w-full mt-4 bg-gradient-primary hover:bg-primary-dark text-white">
-                Get Started
+                Login
               </Button>
             </motion.div>
           )}

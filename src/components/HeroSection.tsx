@@ -1,170 +1,107 @@
-
-
 // src/components/HeroSection.jsx (Updated)
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Hero3D } from './Hero3D';
-import { Link } from 'react-router-dom';
-import { useRef } from 'react';
-import {ServiceCard}  from './ServiceCard'; 
-// <-- Import the new card component
-
-// --- NEW: Demo data for the cards ---
-const cardData = [
-  { title: "Cybersecurity", color: "#00ffff" }, // Cyan
-  { title: "Full Stack Dev", color: "#f06292" }, // Pink
-  { title: "Data Science", color: "#4db6ac" },   // Teal
-  { title: "Data Analysis", color: "#ffb74d" },  // Orange
-];
-
-// --- NEW: Animation variants for the card container ---
-const gridContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2, // This will animate children one by one
-      delayChildren: 0.8,   // Start after the main hero text has animated in
-    },
-  },
-};
-
+import React, { useRef } from "react";
+import { useScroll, useTransform, motion } from "framer-motion";
+import { Hero3D } from "./Hero3D";
 
 export const HeroSection = () => {
-  const sectionRef = useRef(null);
+  const containerRef = useRef<any>(null);
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"]
+    target: containerRef,
+    offset: ["start start", "end start"],
   });
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  const x = useTransform(scrollYProgress, [0, 1], [0, -600]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 1], [1, 0.9, 0.2]);
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
+
+  const scaleDimensions = () => {
+    return isMobile ? [0.7, 0.9] : [1.05, 1];
+  };
+
+  const rotate = useTransform(scrollYProgress, [0, 0.5], [50, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions());
+  const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
+  const titleComponent = (
+    <>
+      
+      <motion.h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-white">
+        Transform Your Career <br />
+        <span className="text-blue-500">INLIGHN TECH</span>
+      </motion.h1>
+      <motion.p className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed max-w-2xl mx-auto">
+        Gain real-world experience with our immersive internship programs in Cybersecurity, Full Stack Development, Data Science, and Data Analysis
+      </motion.p>
+      <motion.div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a href="/#programs" className="p-3 px-8 rounded-full bg-blue-500 text-white font-bold text-lg">
+          Explore Internships
+        </a>
+      </motion.div>
+      <p className="text-gray-400 text-sm mt-2">Learn more</p>
+    </>
+  );
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* 3D Background */}
+    <section
+      ref={containerRef}
+      className="relative h-[80rem] flex items-center justify-center overflow-hidden p-2 md:p-20 bg-black"
+    >
       <div className="absolute inset-0 z-0">
         <Hero3D className="w-full h-full" />
       </div>
-
-      {/* Tech Grid Overlay */}
       <div className="absolute inset-0 tech-grid opacity-20" />
 
-      {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center pb-40 md:pb-48">
+      <div
+        className="py-10 md:py-40 w-full relative"
+        style={{
+          perspective: "1000px",
+        }}
+      >
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl mx-auto mb-12" // Reduced margin-bottom to make space
+          style={{
+            translateY: translate,
+          }}
+          className="div max-w-5xl mx-auto text-center"
         >
-          <motion.h1
-            className="text-5xl md:text-7xl font-bold mb-6 leading-tight"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <span className="gradient-text">Transform Your Career</span>
-            <br />
-            INLIGHN TECH
-          </motion.h1>
-
-          <motion.p
-            className="text-xl md:text-2xl text-gray-300 mb-8 leading-relaxed"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Gain real-world experience with our immersive internship programs in{' '}
-            <span className="text-secondary font-semibold">Cybersecurity</span>,{' '}
-            <span className="text-secondary font-semibold">Full Stack Development</span>,{' '}
-            <span className="text-secondary font-semibold">Data Science</span>, and{' '}
-            <span className="text-secondary font-semibold">Data Analysis</span>
-          </motion.p>
-
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center" 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Link to="/programs">
-              <Button
-                size="lg"
-                className="bg-gradient-primary hover:bg-primary-dark text-white px-8 py-4 text-lg font-semibold hover-glow animate-pulse-glow"
-              >
-                Explore Internships
-              </Button>
-            </Link>
-            <Link to="/about">
-              <Button
-                variant="outline"
-                size="lg"
-                className="border-secondary text-secondary hover:bg-secondary hover:text-navy px-8 py-4 text-lg font-semibold glass-effect"
-              >
-                Learn More
-              </Button>
-            </Link>
-          </motion.div>
+          {titleComponent}
         </motion.div>
-
-        {/* --- NEW: 3D Card Grid Section --- */}
-        
-
+        <motion.div
+          style={{
+            rotateX: rotate,
+            scale,
+            boxShadow:
+              "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
+          }}
+          className="max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#6C6C6C] p-2 md:p-6 bg-[#222222] rounded-[30px] shadow-2xl"
+        >
+          <div className="h-full w-full overflow-hidden rounded-2xl bg-zinc-900">
+            <div className="flex items-center justify-between px-4 py-3 bg-gray-800/50 rounded-t-xl">
+                <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center text-white font-bold text-sm">N</div>
+                    <span className="text-gray-400 text-sm">Gain real Life experience</span>
+                    <button className="text-blue-500 text-sm font-semibold">Connect domain</button>
+                </div>
+              
+            </div>
+            <div className="bg-zinc-900">
+                <img
+                  src="/lovable-uploads/f9c7bc08-c9b0-4807-9211-52bdf759d5a9.png"
+                  alt="hero"
+                  className="w-full h-full object-cover"
+                />
+            </div>
+          </div>
+        </motion.div>
       </div>
-
-      {/* Floating Stats Section (kept as is) */}
-      <motion.div
-        className="absolute bottom-12 md:bottom-16 left-0 right-0 w-full overflow-hidden"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1 }}
-        style={{ opacity }}
-      >
-        
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-12 md:bottom-16 left-0 right-0 w-full overflow-hidden"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1 }}
-        style={{ opacity }}
-      >
-        <motion.div
-          className="flex gap-4 md:gap-6 justify-start items-center px-4 md:px-6 w-max"
-          style={{ x }}
-        >
-          <div className="glass-effect px-4 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap min-w-[160px] md:min-w-[180px] text-center flex-shrink-0">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1">500+</div>
-            <div className="text-xs md:text-sm text-gray-300">Students Enrolled</div>
-          </div>
-          <div className="glass-effect px-4 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap min-w-[160px] md:min-w-[180px] text-center flex-shrink-0">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1">95%</div>
-            <div className="text-xs md:text-sm text-gray-300">Success Rate</div>
-          </div>
-          <div className="glass-effect px-4 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap min-w-[160px] md:min-w-[180px] text-center flex-shrink-0">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1">50+</div>
-            <div className="text-xs md:text-sm text-gray-300">Industry Partners</div>
-          </div>
-          <div className="glass-effect px-4 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap min-w-[160px] md:min-w-[180px] text-center flex-shrink-0">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1">4</div>
-            <div className="text-xs md:text-sm text-gray-300">Core Programs</div>
-          </div>
-          <div className="glass-effect px-4 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap min-w-[160px] md:min-w-[180px] text-center flex-shrink-0">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1">24/7</div>
-            <div className="text-xs md:text-sm text-gray-300">Support Available</div>
-          </div>
-          <div className="glass-effect px-4 md:px-6 py-3 md:py-4 rounded-lg whitespace-nowrap min-w-[160px] md:min-w-[180px] text-center flex-shrink-0">
-            <div className="text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1">100%</div>
-            <div className="text-xs md:text-sm text-gray-300">Placement Assistance</div>
-          </div>
-        </motion.div>
-      </motion.div>
-      
-
-      
     </section>
   );
 };
